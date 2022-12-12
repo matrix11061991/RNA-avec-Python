@@ -9,7 +9,7 @@ x = np.array([[1, 2], [3, 4], [5, 6]])
 # Création du modèle de réseau de neurones en utilisant la bibliothèque Keras
 
 model = Sequential()
-model.add(Dense(4, input_dim=2, activation='relu'))
+model.add(Dense(5, input_dim=2, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 # Compilation et entraînement du modèle en utilisant l'algorithme de descente de gradient
