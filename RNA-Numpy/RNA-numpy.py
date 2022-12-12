@@ -1,32 +1,36 @@
 import numpy as np
 
-# Définition des poids et biais du réseau
-weights = [
-    np.array([[-1, 1], [1, 1]]),  # Couche 1 : 2 neurones, 2 entrées chacun
-    np.array([[-1], [1]])         # Couche 2 : 1 neurone, 2 entrées
-]
-biases = [
-    np.array([0, 0]), # Couche 1 : 2 neurones
-    np.array([0])     # Couche 2 : 1 neurone
-]
+# Définition des paramètres du réseau de neurones
+n_inputs = 784  # Nombre d'entrées (une image de 28x28 pixels)
+n_hidden1 = 256  # Nombre de neurones dans la première couche cachée
+n_hidden2 = 128  # Nombre de neurones dans la seconde couche cachée
+n_outputs = 10  # Nombre de sorties (un chiffre de 0 à 9)
 
-# Fonction d'activation sigmoïde
+# Initialisation des poids et des biais
+weights = {
+    'hidden1': np.random.randn(n_inputs, n_hidden1),
+    'hidden2': np.random.randn(n_hidden1, n_hidden2),
+    'output': np.random.randn(n_hidden2, n_outputs)
+}
+
+biases = {
+    'hidden1': np.zeros(n_hidden1),
+    'hidden2': np.zeros(n_hidden2),
+    'output': np.zeros(n_outputs)
+}
+
+# Fonction d'activation : sigmoïde
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-# Propagation avant
-def forward_propagation(inputs):
-    # Couche 1 : calcul des activations en fonction des poids et des biais
-    layer1_activations = sigmoid(np.dot(inputs, weights[0]) + biases[0])
-    
-    # Couche 2 : calcul des activations en fonction des poids et des biais
-    layer2_activations = sigmoid(np.dot(layer1_activations, weights[1]) + biases[1])
-    
-    # Renvoi des résultats
-    return layer1_activations, layer2_activations
+# Fonction de propagation avant (forward propagation)
+def forward_prop(x, weights, biases):
+    hidden1_out = sigmoid(np.dot(x, weights['hidden1']) + biases['hidden1'])
+    hidden2_out = sigmoid(np.dot(hidden1_out, weights['hidden2']) + biases['hidden2'])
+    output_out = sigmoid(np.dot(hidden2_out, weights['output']) + biases['output'])
+    return output_out
 
-# Exemple d'utilisation du réseau avec des données d'entrée
-inputs = np.array([[0, 1]])
-layer1_activations, layer2_activations = forward_propagation(inputs)
-print(layer1_activations) # Attendu : [[0.5, 0.5]]
-print(layer2_activations) # Attendu : [[0.5]]
+# Exemple d'utilisation du réseau
+input_data = np.random.randn(1, 784)  # Génère des données d'entrée aléatoires
+output = forward_prop(input_data, weights, biases)  # Propagation avant
+print(output)  # Affiche la sortie du réseau
